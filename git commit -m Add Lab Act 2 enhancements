@@ -1,0 +1,708 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mindex 9918c15..011146a 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -8,3 +8,6 @@[m [mThe primary challenge that I encountered during this activity is my current envi[m
+ [m
+ # Lab Activity 1[m
+ A placeholder is used in the event that an image is not present which is what makes it dynamic, integration is done by referring to a URL that contains the address to an image.[m
+[32m+[m
+[32m+[m[32m# Lab Activity 2[m
+[32m+[m[32mI'm personally not sure about "efficiently" but by standardizing what each post should contain and how it should be presented it increases consistency ensuring the order at which items are written doesn't matter within newsfeed_screen because newsfeed_card handles the presentation, formatting them correctly. The same principle can be said for the notifications. Enhancement 1 was done alongside side the "efficiency" point, Enhancement 2 was done by creating a constant String that holds the app title, allowing it to be changed universally by editing only 1 field. I also did Enhancement 4 by just writing down what the antonyms of "Face" and "Book" are into a title. I had trouble actually noticing any of my changes no matter how often I closed and restarted the emulator, I don't really understand much of what was wrong, but after directing the terminal to run in lao_mobprog instead of lao_mobprogAY2627, I was able to open an android emulator and then do flutter run -d emulator-5554 which allowed me to work on the activity because I only needed to shift+r to restart the emulator and witness my changes without going through the trouble I went through previously. Not much else went wrong for activity 2, cursed events only really plagued me back in activity 1, but nevertheless fixing what went wrong still took much of my time. Enhancement 3, it was done by keeping tab definitions within a list in home_screen and then adding an item. Enhancement 5, I just referred to the link within the activity guide and chose the 3rd palette. Admittedly, I applied it very poorly, but it works and I did it. Also sir, I know you read these things and I've overheard you talking about how you want us to talk normally and stuff without AI rewriting our words, I swear to you this is actually how I write things down. Also I'll admit I do not comment my code much, I'll try working on that in the future.[m
+\ No newline at end of file[m
+[1mdiff --git a/android/app/src/main/AndroidManifest.xml b/android/app/src/main/AndroidManifest.xml[m
+[1mindex 6e7b613..308c565 100644[m
+[1m--- a/android/app/src/main/AndroidManifest.xml[m
+[1m+++ b/android/app/src/main/AndroidManifest.xml[m
+[36m@@ -1,6 +1,6 @@[m
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android">[m
+     <application[m
+[31m-        android:label="lao_mobprog"[m
+[32m+[m[32m        android:label="BlahBlahBlahBlahh"[m
+         android:name="${applicationName}"[m
+         android:icon="@mipmap/ic_launcher">[m
+         <activity[m
+[1mdiff --git a/assets/desktop.ini b/assets/desktop.ini[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a7af5d3[m
+[1m--- /dev/null[m
+[1m+++ b/assets/desktop.ini[m
+[36m@@ -0,0 +1,2 @@[m
+[32m+[m[32m[LocalizedFileNames][m
+[32m+[m[32mowl.jpg=@owl,0[m
+[1mdiff --git a/assets/images/meimei.jpg b/assets/images/meimei.jpg[m
+[1mnew file mode 100644[m
+[1mindex 0000000..231fb19[m
+Binary files /dev/null and b/assets/images/meimei.jpg differ
+[1mdiff --git a/lib/constants.dart b/lib/constants.dart[m
+[1mindex d72a72b..b6b8243 100644[m
+[1m--- a/lib/constants.dart[m
+[1m+++ b/lib/constants.dart[m
+[36m@@ -2,8 +2,10 @@[m
+ [m
+ import 'package:material_ui/material_ui.dart';[m
+ [m
+[31m-const Color FB_PRIMARY = Color(0xFF0167f8);[m
+[31m-const Color FB_SECONDARY = Color(0xFF00b3b3);[m
+[31m-const Color FB_DARK_PRIMARY = Color(0xFF021452);[m
+[31m-const Color FB_LIGHT_PRIMARY = Color(0xFF74b7fb);[m
+[31m-const Color FB_TEXT_COLOR_WHITE = Color(0xFFe0f0fd);[m
+[32m+[m[32mconst Color FB_PRIMARY = Color(0xFF031716);[m
+[32m+[m[32mconst Color FB_SECONDARY = Color(0xFF032F30);[m
+[32m+[m[32mconst Color FB_DARK_PRIMARY = Color(0xFF0A7075);[m
+[32m+[m[32mconst Color FB_LIGHT_PRIMARY = Color(0xFF0C969C);[m
+[32m+[m[32mconst Color FB_TEXT_COLOR_WHITE = Color(0xFF6BA3BE);[m
+[32m+[m[32mconst Color FB_BACKGROUND = Color(0xFF274D60);[m
+[32m+[m[32mconst String APP_NAME = 'HeelNote';[m
+[1mdiff --git a/lib/main.dart b/lib/main.dart[m
+[1mindex b56f1cc..4bdc7c7 100644[m
+[1m--- a/lib/main.dart[m
+[1m+++ b/lib/main.dart[m
+[36m@@ -3,6 +3,8 @@[m [mimport 'package:flutter_screenutil/flutter_screenutil.dart';[m
+ [m
+ import 'screens/home_screen.dart';[m
+ import 'screens/newsfeed_screen.dart';[m
+[32m+[m[32mimport 'screens/notification_screen.dart';[m
+[32m+[m[32mimport 'constants.dart';[m
+ [m
+ void main() => runApp(const LaoFacebook());[m
+ [m
+[36m@@ -18,11 +20,12 @@[m [mclass LaoFacebook extends StatelessWidget {[m
+       builder: (_, child) {[m
+         return MaterialApp([m
+           debugShowCheckedModeBanner: false,[m
+[31m-          title: 'Facebook Replication',[m
+[32m+[m[32m          title: APP_NAME,[m
+           initialRoute: '/home',[m
+           routes: {[m
+             '/newsfeed': (context) => const NewsFeedScreen(),[m
+             '/home': (context) => const HomeScreen(),[m
+[32m+[m[32m            '/Notification': (context) => const NotificationScreen(),[m
+           },[m
+         );[m
+       },[m
+[1mdiff --git a/lib/models/app_notification.dart b/lib/models/app_notification.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f82040a[m
+[1m--- /dev/null[m
+[1m+++ b/lib/models/app_notification.dart[m
+[36m@@ -0,0 +1,13 @@[m
+[32m+[m[32mclass AppNotification {[m
+[32m+[m[32m  const AppNotification({[m
+[32m+[m[32m    required this.name,[m
+[32m+[m[32m    required this.post,[m
+[32m+[m[32m    required this.description,[m
+[32m+[m[32m    required this.createdAt,[m
+[32m+[m[32m  });[m
+[32m+[m
+[32m+[m[32m  final String name;[m
+[32m+[m[32m  final String post;[m
+[32m+[m[32m  final String description;[m
+[32m+[m[32m  final DateTime createdAt;[m
+[32m+[m[32m}[m
+[1mdiff --git a/lib/models/social_post.dart b/lib/models/social_post.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3c384b7[m
+[1m--- /dev/null[m
+[1m+++ b/lib/models/social_post.dart[m
+[36m@@ -0,0 +1,19 @@[m
+[32m+[m[32mclass SocialPost {[m
+[32m+[m[32m  const SocialPost({[m
+[32m+[m[32m    required this.userName,[m
+[32m+[m[32m    required this.content,[m
+[32m+[m[32m    required this.date,[m
+[32m+[m[32m    required this.numOfLikes,[m
+[32m+[m[32m    this.hasImage = false,[m
+[32m+[m[32m    this.imageUrl,[m
+[32m+[m[32m    this.avatarUrl,[m
+[32m+[m[32m  });[m
+[32m+[m
+[32m+[m[32m  final String userName;[m
+[32m+[m[32m  final String content;[m
+[32m+[m[32m  final DateTime date;[m
+[32m+[m[32m  final int numOfLikes;[m
+[32m+[m[32m  final bool hasImage;[m
+[32m+[m[32m  final String? imageUrl;[m
+[32m+[m[32m  final String? avatarUrl;[m
+[32m+[m[32m}[m
+[1mdiff --git a/lib/screens/home_screen.dart b/lib/screens/home_screen.dart[m
+[1mindex 62ff282..e1b3aa3 100644[m
+[1m--- a/lib/screens/home_screen.dart[m
+[1m+++ b/lib/screens/home_screen.dart[m
+[36m@@ -9,6 +9,27 @@[m [mimport '../constants.dart';[m
+ import 'newsfeed_screen.dart';[m
+ import '../widgets/profile_avatar.dart';[m
+ [m
+[32m+[m[32mconst _navigationItems = <_NavigationItem>[[m
+[32m+[m[32m  _NavigationItem(icon: Icons.home, label: 'Home'),[m
+[32m+[m[32m  _NavigationItem(icon: Icons.people, label: 'Friends'),[m
+[32m+[m[32m  _NavigationItem(icon: Icons.person, label: 'Profile'),[m
+[32m+[m[32m  _NavigationItem([m
+[32m+[m[32m    icon: Icons.notifications,[m
+[32m+[m[32m    label: 'Notifications',[m
+[32m+[m[32m    route: '/Notification',[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  _NavigationItem(icon: Icons.menu, label: 'Menu'),[m
+[32m+[m[32m  _NavigationItem(icon: Icons.star, label: 'TestTest'),[m
+[32m+[m[32m];[m
+[32m+[m
+[32m+[m[32mclass _NavigationItem {[m
+[32m+[m[32m  const _NavigationItem({required this.icon, required this.label, this.route});[m
+[32m+[m
+[32m+[m[32m  final IconData icon;[m
+[32m+[m[32m  final String label;[m
+[32m+[m[32m  final String? route;[m
+[32m+[m[32m}[m
+[32m+[m
+ class HomeScreen extends StatefulWidget {[m
+   const HomeScreen({super.key});[m
+ [m
+[36m@@ -57,34 +78,65 @@[m [mclass _HomeScreenState extends State<HomeScreen> {[m
+   @override[m
+   Widget build(BuildContext context) {[m
+     return Scaffold([m
+[31m-      backgroundColor: Colors.white,[m
+[32m+[m[32m      backgroundColor: FB_BACKGROUND,[m
+       appBar: AppBar([m
+[31m-        backgroundColor: Colors.white,[m
+[32m+[m[32m        backgroundColor: FB_BACKGROUND,[m
+         elevation: 0,[m
+[31m-        title: const Text([m
+[31m-          'facebook',[m
+[32m+[m[32m        title: Text([m
+[32m+[m[32m          selectedIndex == 0 ? APP_NAME : _navigationItems[selectedIndex].label,[m
+           style: TextStyle([m
+             color: FB_PRIMARY,[m
+[31m-            fontSize: 30,[m
+[32m+[m[32m            fontSize: selectedIndex == 0 ? 30 : 22,[m
+             fontWeight: FontWeight.bold,[m
+           ),[m
+         ),[m
+         actions: [[m
+           IconButton([m
+             onPressed: () {},[m
+[31m-            icon: const Icon(Icons.add_circle, color: Colors.black),[m
+[32m+[m[32m            icon: const Icon(Icons.add_circle, color: FB_DARK_PRIMARY),[m
+           ),[m
+           IconButton([m
+             onPressed: () {},[m
+[31m-            icon: const Icon(Icons.search, color: Colors.black),[m
+[32m+[m[32m            icon: const Icon(Icons.search, color: FB_DARK_PRIMARY),[m
+           ),[m
+           IconButton([m
+             onPressed: () {},[m
+[31m-            icon: const Icon(Icons.message, color: Colors.black),[m
+[32m+[m[32m            icon: const Icon(Icons.message, color: FB_DARK_PRIMARY),[m
+           ),[m
+         ],[m
+       ),[m
+[31m-      body: Column([m
+[32m+[m[32m      body: _buildSelectedTab(),[m
+[32m+[m[32m      bottomNavigationBar: BottomNavigationBar([m
+[32m+[m[32m        currentIndex: selectedIndex,[m
+[32m+[m[32m        selectedItemColor: FB_PRIMARY,[m
+[32m+[m[32m        unselectedItemColor: Colors.grey,[m
+[32m+[m[32m        type: BottomNavigationBarType.fixed,[m
+[32m+[m[32m        onTap: (index) {[m
+[32m+[m[32m          final route = _navigationItems[index].route;[m
+[32m+[m[32m          if (route != null) {[m
+[32m+[m[32m            Navigator.pushNamed(context, route);[m
+[32m+[m[32m            return;[m
+[32m+[m[32m          }[m
+[32m+[m
+[32m+[m[32m          setState(() {[m
+[32m+[m[32m            selectedIndex = index;[m
+[32m+[m[32m          });[m
+[32m+[m[32m        },[m
+[32m+[m[32m        items: _navigationItems[m
+[32m+[m[32m            .map([m
+[32m+[m[32m              (item) => BottomNavigationBarItem([m
+[32m+[m[32m                icon: Icon(item.icon),[m
+[32m+[m[32m                label: item.label,[m
+[32m+[m[32m              ),[m
+[32m+[m[32m            )[m
+[32m+[m[32m            .toList(),[m
+[32m+[m[32m      ),[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  Widget _buildSelectedTab() {[m
+[32m+[m[32m    if (selectedIndex == 0) {[m
+[32m+[m[32m      return Column([m
+         children: [[m
+           Padding([m
+             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),[m
+[36m@@ -112,44 +164,19 @@[m [mclass _HomeScreenState extends State<HomeScreen> {[m
+                 ),[m
+                 IconButton([m
+                   onPressed: () {},[m
+[31m-                  icon: const Icon(Icons.photo_library, color: Colors.green),[m
+[32m+[m[32m                  icon: const Icon(Icons.photo_library, color: FB_DARK_PRIMARY),[m
+                 ),[m
+               ],[m
+             ),[m
+           ),[m
+           const Divider(height: 1),[m
+           Expanded([m
+[31m-            child: IndexedStack([m
+[31m-              index: selectedIndex == 0 ? 0 : 1,[m
+[31m-              children: [[m
+[31m-                NewsFeedScreen(currentUserAvatar: _profileAvatarImage),[m
+[31m-                Center(child: Text('Profile')),[m
+[31m-              ],[m
+[31m-            ),[m
+[31m-          ),[m
+[31m-        ],[m
+[31m-      ),[m
+[31m-      bottomNavigationBar: BottomNavigationBar([m
+[31m-        currentIndex: selectedIndex,[m
+[31m-        selectedItemColor: FB_PRIMARY,[m
+[31m-        unselectedItemColor: Colors.grey,[m
+[31m-        type: BottomNavigationBarType.fixed,[m
+[31m-        onTap: (index) {[m
+[31m-          setState(() {[m
+[31m-            selectedIndex = index;[m
+[31m-          });[m
+[31m-        },[m
+[31m-        items: const [[m
+[31m-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),[m
+[31m-          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Friends'),[m
+[31m-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),[m
+[31m-          BottomNavigationBarItem([m
+[31m-            icon: Icon(Icons.notifications),[m
+[31m-            label: 'Notifications',[m
+[32m+[m[32m            child: NewsFeedScreen(currentUserAvatar: _profileAvatarImage),[m
+           ),[m
+[31m-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),[m
+         ],[m
+[31m-      ),[m
+[31m-    );[m
+[32m+[m[32m      );[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    return Center(child: Text(_navigationItems[selectedIndex].label));[m
+   }[m
+ }[m
+[1mdiff --git a/lib/screens/newsfeed_screen.dart b/lib/screens/newsfeed_screen.dart[m
+[1mindex 28f872b..65ca62c 100644[m
+[1m--- a/lib/screens/newsfeed_screen.dart[m
+[1m+++ b/lib/screens/newsfeed_screen.dart[m
+[36m@@ -1,7 +1,101 @@[m
+ import 'package:material_ui/material_ui.dart';[m
+ [m
+[32m+[m[32mimport '../models/social_post.dart';[m
+ import '../widgets/newsfeed_card.dart';[m
+ [m
+[32m+[m[32mfinal _posts = <SocialPost>[[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'Cyrus Robles',[m
+[32m+[m[32m    content: 'Kamusta',[m
+[32m+[m[32m    numOfLikes: 100,[m
+[32m+[m[32m    date: DateTime(2026, 10, 11),[m
+[32m+[m[32m    avatarUrl: 'assets/icons/stars.jpg',[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'Roben Juanatas',[m
+[32m+[m[32m    content: 'Kicking off the holiday season with ICpEP-NCR!',[m
+[32m+[m[32m    numOfLikes: 200,[m
+[32m+[m[32m    date: DateTime(2026, 12, 2),[m
+[32m+[m[32m    hasImage: true,[m
+[32m+[m[32m    imageUrl: 'assets/images/froggie.jpg',[m
+[32m+[m[32m    avatarUrl: 'assets/icons/owl.jpg',[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'Leomary Mijares',[m
+[32m+[m[32m    content: 'Ribbit',[m
+[32m+[m[32m    numOfLikes: 999999999,[m
+[32m+[m[32m    date: DateTime(2026, 11, 27),[m
+[32m+[m[32m    hasImage: true,[m
+[32m+[m[32m    imageUrl: 'assets/images/froggie.jpg',[m
+[32m+[m[32m    avatarUrl: 'assets/images/froggie.jpg',[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'RAHHHHH',[m
+[32m+[m[32m    content: 'RAHHHHHHHHHHHHHHHHHHHHHHH',[m
+[32m+[m[32m    numOfLikes: 42,[m
+[32m+[m[32m    date: DateTime(2026, 11, 24),[m
+[32m+[m[32m    hasImage: true,[m
+[32m+[m[32m    avatarUrl: 'assets/icons/owl.jpg',[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'Gurt',[m
+[32m+[m[32m    content: 'Yo',[m
+[32m+[m[32m    numOfLikes: 42,[m
+[32m+[m[32m    date: DateTime(2026, 11, 24),[m
+[32m+[m[32m    hasImage: true,[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'Bleh',[m
+[32m+[m[32m    content: 'Bleh',[m
+[32m+[m[32m    numOfLikes: 42,[m
+[32m+[m[32m    date: DateTime(2026, 11, 24),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'Mavric Lao',[m
+[32m+[m[32m    content: '*paws at u*',[m
+[32m+[m[32m    numOfLikes: 42,[m
+[32m+[m[32m    date: DateTime(2026, 11, 24),[m
+[32m+[m[32m    hasImage: true,[m
+[32m+[m[32m    imageUrl: 'assets/images/meimei.jpg',[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'Leomary Mijares',[m
+[32m+[m[32m    content: '*paws at u*',[m
+[32m+[m[32m    numOfLikes: 42,[m
+[32m+[m[32m    date: DateTime(2026, 11, 24),[m
+[32m+[m[32m    imageUrl: 'assets/images/meimei.jpg',[m
+[32m+[m[32m    hasImage: true,[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'The Observable Universe',[m
+[32m+[m[32m    content: 'Im expanding yo.',[m
+[32m+[m[32m    numOfLikes: 42,[m
+[32m+[m[32m    date: DateTime(2026, 11, 24),[m
+[32m+[m[32m    avatarUrl: 'assets/icons/stars.jpg',[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'Owl',[m
+[32m+[m[32m    content: 'LF cravings.',[m
+[32m+[m[32m    numOfLikes: 42,[m
+[32m+[m[32m    date: DateTime(2026, 11, 24),[m
+[32m+[m[32m    hasImage: true,[m
+[32m+[m[32m    avatarUrl: 'assets/icons/owl.jpg',[m
+[32m+[m[32m    imageUrl: 'assets/images/froggie.jpg',[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    userName: 'Gragas',[m
+[32m+[m[32m    content: 'Bomba.',[m
+[32m+[m[32m    numOfLikes: 42,[m
+[32m+[m[32m    date: DateTime(2026, 11, 24),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  SocialPost([m
+[32m+[m[32m    content: 'Dribble',[m
+[32m+[m[32m    userName: 'Balls Community',[m
+[32m+[m[32m    numOfLikes: 42,[m
+[32m+[m[32m    date: DateTime(2026, 11, 24),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m];[m
+[32m+[m
+ class NewsFeedScreen extends StatelessWidget {[m
+   final ImageProvider currentUserAvatar;[m
+ [m
+[36m@@ -12,27 +106,21 @@[m [mclass NewsFeedScreen extends StatelessWidget {[m
+ [m
+   @override[m
+   Widget build(BuildContext context) {[m
+[31m-    return ListView([m
+[31m-      children: [[m
+[31m-        NewsFeedCard([m
+[31m-          userName: 'Cyrus Robles',[m
+[31m-          postContent: 'Kamusta',[m
+[31m-          numOfLikes: 100,[m
+[31m-          date: 'October 11',[m
+[31m-          avatarUrl: 'assets/icons/stars.jpg',[m
+[31m-          currentUserAvatar: currentUserAvatar,[m
+[31m-        ),[m
+[31m-        NewsFeedCard([m
+[31m-          userName: 'Roben Juanatas',[m
+[31m-          postContent: 'Kicking off the holiday season with ICpEP-NCR!',[m
+[31m-          numOfLikes: 200,[m
+[31m-          date: 'December 2',[m
+[31m-          hasImage: true,[m
+[31m-          imageUrl: 'assets/images/froggie.jpg',[m
+[31m-          avatarUrl: 'assets/icons/owl.jpg',[m
+[32m+[m[32m    return ListView.builder([m
+[32m+[m[32m      itemCount: _posts.length,[m
+[32m+[m[32m      itemBuilder: (context, index) {[m
+[32m+[m[32m        final post = _posts[index];[m
+[32m+[m[32m        return NewsFeedCard([m
+[32m+[m[32m          userName: post.userName,[m
+[32m+[m[32m          postContent: post.content,[m
+[32m+[m[32m          numOfLikes: post.numOfLikes,[m
+[32m+[m[32m          date: MaterialLocalizations.of(context).formatMediumDate(post.date),[m
+[32m+[m[32m          hasImage: post.hasImage,[m
+[32m+[m[32m          imageUrl: post.imageUrl,[m
+[32m+[m[32m          avatarUrl: post.avatarUrl,[m
+           currentUserAvatar: currentUserAvatar,[m
+[31m-        ),[m
+[31m-      ],[m
+[32m+[m[32m        );[m
+[32m+[m[32m      },[m
+     );[m
+   }[m
+ }[m
+[1mdiff --git a/lib/screens/notification_screen.dart b/lib/screens/notification_screen.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3392129[m
+[1m--- /dev/null[m
+[1m+++ b/lib/screens/notification_screen.dart[m
+[36m@@ -0,0 +1,171 @@[m
+[32m+[m[32mimport '../widgets/notification.dart' as notif;[m
+[32m+[m
+[32m+[m[32mimport 'package:material_ui/material_ui.dart';[m
+[32m+[m
+[32m+[m[32mimport '../models/app_notification.dart';[m
+[32m+[m
+[32m+[m[32mfinal _notifications = <AppNotification>[[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Test',[m
+[32m+[m[32m    post: 'Post',[m
+[32m+[m[32m    description: 'Description',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 24),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Test1',[m
+[32m+[m[32m    post: 'Post1',[m
+[32m+[m[32m    description: 'Description1',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 23),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Cyrus Robles',[m
+[32m+[m[32m    post: 'Kamusta',[m
+[32m+[m[32m    description: 'Reacted to your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Mavric Lao',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie5',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie6',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie7',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie8',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie9',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie10',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie11',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie11',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie12',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie13',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie14',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie15',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie16',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie17',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie18',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie19',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m  AppNotification([m
+[32m+[m[32m    name: 'Froggie20',[m
+[32m+[m[32m    post: 'Ribbit',[m
+[32m+[m[32m    description: 'Liked your post',[m
+[32m+[m[32m    createdAt: DateTime(2026, 11, 22),[m
+[32m+[m[32m  ),[m
+[32m+[m[32m];[m
+[32m+[m
+[32m+[m[32mclass NotificationScreen extends StatefulWidget {[m
+[32m+[m[32m  const NotificationScreen({super.key});[m
+[32m+[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  State<NotificationScreen> createState() => _NotificationScreenState();[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mclass _NotificationScreenState extends State<NotificationScreen> {[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  Widget build(BuildContext context) {[m
+[32m+[m[32m    return Scaffold([m
+[32m+[m[32m      backgroundColor: Colors.white,[m
+[32m+[m[32m      appBar: AppBar([m
+[32m+[m[32m        backgroundColor: Colors.white,[m
+[32m+[m[32m        elevation: 0,[m
+[32m+[m[32m        title: const Text([m
+[32m+[m[32m          'Notifications',[m
+[32m+[m[32m          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),[m
+[32m+[m[32m        ),[m
+[32m+[m[32m      ),[m
+[32m+[m[32m      body: ListView.separated([m
+[32m+[m[32m        itemCount: _notifications.length,[m
+[32m+[m[32m        itemBuilder: (context, index) {[m
+[32m+[m[32m          final notification = _notifications[index];[m
+[32m+[m[32m          return notif.Notification([m
+[32m+[m[32m            name: notification.name,[m
+[32m+[m[32m            post: notification.post,[m
+[32m+[m[32m            description: notification.description,[m
+[32m+[m[32m            createdAt: notification.createdAt,[m
+[32m+[m[32m          );[m
+[32m+[m[32m        },[m
+[32m+[m[32m        separatorBuilder: (context, index) => const Divider(height: 1),[m
+[32m+[m[32m      ),[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[1mdiff --git a/lib/widgets/custom_button.dart b/lib/widgets/custom_button.dart[m
+[1mindex f025cce..885e311 100644[m
+[1m--- a/lib/widgets/custom_button.dart[m
+[1m+++ b/lib/widgets/custom_button.dart[m
+[36m@@ -1,4 +1,3 @@[m
+[31m-[m
+ import 'package:material_ui/material_ui.dart';[m
+ [m
+ class CustomButton extends StatelessWidget {[m
+[36m@@ -20,10 +19,7 @@[m [mclass CustomButton extends StatelessWidget {[m
+     return TextButton.icon([m
+       onPressed: onPressed,[m
+       icon: Icon(icon, color: color),[m
+[31m-      label: Text([m
+[31m-        label,[m
+[31m-        style: TextStyle(color: color),[m
+[31m-      ),[m
+[32m+[m[32m      label: Text(label, style: TextStyle(color: color)),[m
+     );[m
+   }[m
+ }[m
+[1mdiff --git a/lib/widgets/custom_text.dart b/lib/widgets/custom_text.dart[m
+[1mindex c1933c5..5a123e3 100644[m
+[1m--- a/lib/widgets/custom_text.dart[m
+[1m+++ b/lib/widgets/custom_text.dart[m
+[36m@@ -1,4 +1,3 @@[m
+[31m-[m
+ import 'package:material_ui/material_ui.dart';[m
+ [m
+ class CustomText extends StatelessWidget {[m
+[1mdiff --git a/lib/widgets/notification.dart b/lib/widgets/notification.dart[m
+[1mnew file mode 100644[m
+[1mindex 0000000..4bed2b0[m
+[1m--- /dev/null[m
+[1m+++ b/lib/widgets/notification.dart[m
+[36m@@ -0,0 +1,62 @@[m
+[32m+[m[32mimport '../widgets/custom_text.dart';[m
+[32m+[m
+[32m+[m[32mimport 'package:material_ui/material_ui.dart';[m
+[32m+[m[32mimport 'package:flutter_screenutil/flutter_screenutil.dart';[m
+[32m+[m
+[32m+[m[32mclass Notification extends StatelessWidget {[m
+[32m+[m[32m  const Notification({[m
+[32m+[m[32m    super.key,[m
+[32m+[m[32m    required this.name,[m
+[32m+[m[32m    required this.post,[m
+[32m+[m[32m    required this.description,[m
+[32m+[m[32m    required this.createdAt,[m
+[32m+[m[32m  });[m
+[32m+[m
+[32m+[m[32m  final String name;[m
+[32m+[m[32m  final String post;[m
+[32m+[m[32m  final String description;[m
+[32m+[m[32m  final DateTime createdAt;[m
+[32m+[m
+[32m+[m[32m  @override[m
+[32m+[m[32m  Widget build(BuildContext context) {[m
+[32m+[m[32m    return Container([m
+[32m+[m[32m      padding: EdgeInsets.all(ScreenUtil().setSp(15)),[m
+[32m+[m[32m      child: Row([m
+[32m+[m[32m        children: [[m
+[32m+[m[32m          Icon(Icons.person, size: ScreenUtil().setSp(50)),[m
+[32m+[m[32m          SizedBox(width: ScreenUtil().setWidth(10)),[m
+[32m+[m[32m          Column([m
+[32m+[m[32m            crossAxisAlignment: CrossAxisAlignment.start,[m
+[32m+[m[32m            children: [[m
+[32m+[m[32m              CustomText([m
+[32m+[m[32m                text: name,[m
+[32m+[m[32m                fontSize: ScreenUtil().setSp(20),[m
+[32m+[m[32m                color: Colors.black,[m
+[32m+[m[32m                fontWeight: FontWeight.w800,[m
+[32m+[m[32m              ),[m
+[32m+[m[32m              CustomText([m
+[32m+[m[32m                text: 'Posted: $post',[m
+[32m+[m[32m                fontSize: ScreenUtil().setSp(13),[m
+[32m+[m[32m                color: Colors.black,[m
+[32m+[m[32m              ),[m
+[32m+[m[32m              CustomText([m
+[32m+[m[32m                text: description,[m
+[32m+[m[32m                fontSize: ScreenUtil().setSp(12),[m
+[32m+[m[32m                color: Colors.black,[m
+[32m+[m[32m                fontStyle: FontStyle.italic,[m
+[32m+[m[32m              ),[m
+[32m+[m[32m              CustomText([m
+[32m+[m[32m                text: MaterialLocalizations.of(context)[m
+[32m+[m[32m                    .formatMediumDate(createdAt),[m
+[32m+[m[32m                fontSize: ScreenUtil().setSp(12),[m
+[32m+[m[32m                color: Colors.grey,[m
+[32m+[m[32m              ),[m
+[32m+[m[32m            ],[m
+[32m+[m[32m          ),[m
+[32m+[m[32m          const Spacer(),[m
+[32m+[m[32m          const Icon(Icons.more_horiz),[m
+[32m+[m[32m        ],[m
+[32m+[m[32m      ),[m
+[32m+[m[32m    );[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m

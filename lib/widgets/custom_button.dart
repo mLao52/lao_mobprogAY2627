@@ -1,4 +1,3 @@
-
 import 'package:material_ui/material_ui.dart';
 
 class CustomButton extends StatelessWidget {
@@ -20,10 +19,7 @@ class CustomButton extends StatelessWidget {
     return TextButton.icon(
       onPressed: onPressed,
       icon: Icon(icon, color: color),
-      label: Text(
-        label,
-        style: TextStyle(color: color),
-      ),
+      label: Text(label, style: TextStyle(color: color)),
     );
   }
 }

@@ -9,6 +9,27 @@ import '../constants.dart';
 import 'newsfeed_screen.dart';
 import '../widgets/profile_avatar.dart';
 
+const _navigationItems = <_NavigationItem>[
+  _NavigationItem(icon: Icons.home, label: 'Home'),
+  _NavigationItem(icon: Icons.people, label: 'Friends'),
+  _NavigationItem(icon: Icons.person, label: 'Profile'),
+  _NavigationItem(
+    icon: Icons.notifications,
+    label: 'Notifications',
+    route: '/Notification',
+  ),
+  _NavigationItem(icon: Icons.menu, label: 'Menu'),
+  _NavigationItem(icon: Icons.star, label: 'TestTest'),
+];
+
+class _NavigationItem {
+  const _NavigationItem({required this.icon, required this.label, this.route});
+
+  final IconData icon;
+  final String label;
+  final String? route;
+}
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -57,34 +78,65 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: FB_BACKGROUND,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: FB_BACKGROUND,
         elevation: 0,
-        title: const Text(
-          'facebook',
+        title: Text(
+          selectedIndex == 0 ? APP_NAME : _navigationItems[selectedIndex].label,
           style: TextStyle(
             color: FB_PRIMARY,
-            fontSize: 30,
+            fontSize: selectedIndex == 0 ? 30 : 22,
             fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.add_circle, color: Colors.black),
+            icon: const Icon(Icons.add_circle, color: FB_DARK_PRIMARY),
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.search, color: Colors.black),
+            icon: const Icon(Icons.search, color: FB_DARK_PRIMARY),
           ),
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.message, color: Colors.black),
+            icon: const Icon(Icons.message, color: FB_DARK_PRIMARY),
           ),
         ],
       ),
-      body: Column(
+      body: _buildSelectedTab(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        selectedItemColor: FB_PRIMARY,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          final route = _navigationItems[index].route;
+          if (route != null) {
+            Navigator.pushNamed(context, route);
+            return;
+          }
+
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        items: _navigationItems
+            .map(
+              (item) => BottomNavigationBarItem(
+                icon: Icon(item.icon),
+                label: item.label,
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildSelectedTab() {
+    if (selectedIndex == 0) {
+      return Column(
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
@@ -112,44 +164,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.photo_library, color: Colors.green),
+                  icon: const Icon(Icons.photo_library, color: FB_DARK_PRIMARY),
                 ),
               ],
             ),
           ),
           const Divider(height: 1),
           Expanded(
-            child: IndexedStack(
-              index: selectedIndex == 0 ? 0 : 1,
-              children: [
-                NewsFeedScreen(currentUserAvatar: _profileAvatarImage),
-                Center(child: Text('Profile')),
-              ],
-            ),
+            child: NewsFeedScreen(currentUserAvatar: _profileAvatarImage),
           ),
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        selectedItemColor: FB_PRIMARY,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Friends'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifications',
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
-        ],
-      ),
-    );
+      );
+    }
+
+    return Center(child: Text(_navigationItems[selectedIndex].label));
   }
 }

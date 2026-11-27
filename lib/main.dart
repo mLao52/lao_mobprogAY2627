@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'screens/home_screen.dart';
 import 'screens/newsfeed_screen.dart';
+import 'screens/notification_screen.dart';
+import 'constants.dart';
 
 void main() => runApp(const LaoFacebook());
 
@@ -18,11 +20,12 @@ class LaoFacebook extends StatelessWidget {
       builder: (_, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Facebook Replication',
+          title: APP_NAME,
           initialRoute: '/home',
           routes: {
             '/newsfeed': (context) => const NewsFeedScreen(),
             '/home': (context) => const HomeScreen(),
+            '/Notification': (context) => const NotificationScreen(),
           },
         );
       },
